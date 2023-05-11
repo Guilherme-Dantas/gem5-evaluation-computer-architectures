@@ -1,0 +1,21 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-fopenmp", // Ativa o suporte a OpenMP
+                "-g",
+                "${file}", // Caminho do arquivo atual
+                "-o",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe" // Caminho e nome do arquivo de saída
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}

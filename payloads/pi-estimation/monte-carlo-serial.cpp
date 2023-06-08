@@ -12,7 +12,7 @@ using std::chrono::milliseconds;
 
 int main()
 {
-    long long int dots_quantity = 1000000000000000;
+    long long int dots_quantity = 1000000000;
 
     random_device rd;
     mt19937 gen(rd());
@@ -31,6 +31,8 @@ int main()
             dots_in_circle++;
         }
     }
+
+    std::cout << "Total dots in circle: " << dots_in_circle << endl;
 
     double pi = 4.0 * dots_in_circle / dots_quantity;
 

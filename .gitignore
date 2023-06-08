@@ -1,5 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/c++,visualstudiocode,executable
-# Edit at https://www.toptal.com/developers/gitignore?templates=c++,visualstudiocode,executable
+# Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,c++,executable
+# Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,c++,executable
 
 ### C++ ###
 # Prerequisites
@@ -64,4 +64,4 @@
 .history
 .ionide
 
-# End of https://www.toptal.com/developers/gitignore/api/c++,visualstudiocode,executable
+# End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,c++,executable

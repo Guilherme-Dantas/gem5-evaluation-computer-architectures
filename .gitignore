@@ -64,4 +64,10 @@
 .history
 .ionide
 
+# Packer
+packer
+
+# Disk-images
+x86-ubuntu
+
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,c++,executable

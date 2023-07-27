@@ -73,7 +73,17 @@
         },
         {
             "type": "file",
-            "source": "x86-ubuntu/hello.cpp",
+            "source": "x86-ubuntu/scripts/hello.cpp",
+            "destination": "/home/gem5/"
+        },
+        {
+            "type": "file",
+            "source": "x86-ubuntu/scripts/monte-carlo-parallel.cpp",
+            "destination": "/home/gem5/"
+        },  
+        {
+            "type": "file",
+            "source": "x86-ubuntu/scripts/monte-carlo-serial.cpp",
             "destination": "/home/gem5/"
         },
         {

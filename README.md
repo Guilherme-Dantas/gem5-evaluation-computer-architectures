@@ -1,61 +1,66 @@
-# evaluation-architecture-computers
+# gem5-evaluation-computer-architectures
 
-Repositório dedicado ao desenvolvimento de testes vinculados a arquiteturas de computadores simuladas utilizando Gem5 utilizando como carga algoritmos específicos
+Repository dedicated to the development of tests linked to simulated computer architectures using Gem5, using specific algorithms as the workload.
 
 
 # Informações Úteis
 
-## Configuração e Geração de Imagem Linux
+## Configuration and Linux Image Generation
 
 - Packer
 - QEMU
 
-### Geração de Imagem
-    1. Entrar no diretório disk-image/
-    2. Executar o ./build.sh
+### Image Generation
+
+    1. Enter the disk-image/ directory.
+    2. Execute ./build.sh
+
     
-    Apõs isso, se a configuração do packer for feita, será gerada uma pasta dentro do diretório disk-image/x86-ubuntu. Dentro dessa pasta será possível encontrar a imagem gerada.
+    After this, if the Packer configuration is done, a folder will be generated inside the disk-image/x86-ubuntu directory. Inside this folder, you'll find the generated image.
 
-    É recomendável acompanahar a geração da imagem através de um VNC. O console em que foi executado o comando exibirá um IP e uma porta para se conectar.
+    It's recommended to monitor the image generation through a VNC. The console where the command was executed will display an IP and port to connect to.
 
-    Recomenda-se não interagir com a área remota visto que o Packer somado ao QEMU executaram tudo de maneira automatizada.
+    It's advisable not to interact with the remote area, as Packer along with QEMU will automate everything.
 
-### Configuração da imagem
+### Image Configuration
 
-A geração das imagens utiliza o [Packer](https://developer.hashicorp.com/packer/tutorials?product_intent=packer). Ele facilita o provisionamento de imagems através do QEMU. O Packer possibilita adicionar os arquivos dentro da imagem, permitindo que eles sejam compilados e executados dentro da emulação Full System.
+The image generation uses [Packer](https://developer.hashicorp.com/packer/tutorials?product_intent=packer). It simplifies image provisioning through QEMU. Packer allows adding files inside the image, enabling them to be compiled and executed within Full System emulation.
 
-O template e toda a configuração inicial se baseia no [Recurso](https://resources.gem5.org/resources/x86-ubuntu-18.04-img?version=1.0.0) exposto no Gem5Resources ou diretamente no [repositório](https://github.com/gem5/gem5-resources/tree/develop/src/x86-ubuntu).
+The template and all initial configuration are based on the [Resource](https://resources.gem5.org/resources/x86-ubuntu-18.04-img?version=1.0.0) published in Gem5Resources or directly in the[repository](https://github.com/gem5/gem5-resources/tree/develop/src/x86-ubuntu).
 
-Especificamente nessa imagem, ela possui uma configuração em que ela executa os commandos contidos no m5 readfile, viabilizando executar qualquer tipo de comando dentro da emulação. Por conta disso, utilizando o packer, enviamos os arquivos .cpp para dentro da imagem como pode ser observado no arquivo `disk-image/x86-ubuntu/x86-ubuntu.json` na parte de *provisioners*.
+Specifically in this image, it has a configuration where it executes the commands contained in m5 readfile, enabling the execution of any type of command within the emulation. Because of this, using Packer, we send the .cpp files into the image as can be seen in the file `disk-image/x86-ubuntu/x86-ubuntu.json` in the *provisioners* section.
 
-Para essa imagem, ela executa diretamente o arquivo `disk-image/x86-ubuntu/post-installation.sh` durante o build da imagem e executa o `disk-image/x86-ubuntu/gem5_init.sh` assim que a imagem sobe na emulação, engatilhando os comandos que do m5 readfile serão executados.
+For this image, it directly runs the file `disk-image/x86-ubuntu/post-installation.sh` during the image build and executes `disk-image/x86-ubuntu/gem5_init.sh` as soon as the image boots in the emulation, triggering the m5 readfile commands to be executed.
 
-Tendo essas informações em mãos, é possível viablizar um fluxo em que o arquivo que desejamos executar é passado para a imagem através do *provisioner*, colocamos os comandos dentro do m5 readfile que irão compilar e executar o binário gerados.
+With this information in hand, it's possible to facilitate a workflow where the desired file to execute is passed to the image through the *provisioner*, we put the commands inside m5 readfile that will compile and execute the generated binary.
 
-**É possível passar o binário já compilado e executá-lo, entrando foi encontrado problemas com a versão de compilação que utilizava uma versão diferente de GLIBC, impedindo a execução do binário já compilado.**
+**It's possible to pass the pre-compiled binary and execute it, although problems were encountered with the compilation version that used a different GLIBC version, preventing the execution of the pre-compiled binary.**
 
-## Criação de uma simualação através de componentes Python
+## Creating a Simulation through Python Components
 
-O Gem5 viabiliza através de suas abstrações criar qualquer componente desejado, dentre eles:
-    - Boards
-    - Caches
-    - Processors
-    - Memory
+Gem5 makes it possible through its abstractions to create any desired component, including:
+- Boards
+- Caches
+- Processors
+- Memory
 
-Existem diversos exemplos de scripts já criados, eles podem ser encontrados ao clonar o projeto do Gem5 e seguir o caminho `gem5/configs/example/gem5_library/
+There are several examples of scripts already created; they can be found by cloning the Gem5 project and following the path `gem5/configs/example/gem5_library/
 
-Nesse repositõrio, existe uma pasta chamada `configs`. Ela possui todas as configurações criadas, uma delas é a `x86-ubuntu-run-with-kvm-edited.py`. Essa versão é uma adaptação de uma configuração existente. As alterações feitas foram para utilizar a imagem personalizada, um kernel presente no Gem5Resources e o command que será executado. A variável **command** mantém o conteúdo que será injetado no m5 readfile que foi citado anteriormente, ou seja, ela mantém o comando que será executado apõs o gem5_init foi engatilhado.
+In this repository, there's a folder named `configs`. Ela possui todas as configurações criadas, uma delas é a `x86-ubuntu-run-with-kvm-edited.py`. This version is an adaptation of an existing configuration. The changes made were to use the custom image, a kernel present in Gem5Resources, and the command that will be executed. The **command** variable maintains the content that will be injected into m5 readfile as mentioned before; in other words, it holds the command that will be executed after gem5_init is triggered.
 
-Os componentes podem ser criados com base nas abstrações existentes na biblioteca do gem5, elas estã contidas na pasta `/gem5/src/python`. Novos componentes podem ser criados extendendo essas classes. Para utilizá-los deve-se seguir o [tutorial contido na documentação do Gem5](https://www.gem5.org/documentation/gem5-stdlib/develop-own-components-tutorial)
+Components can be created based on the existing abstractions in the gem5 library, which are contained in the `/gem5/src/python` folder. New components can be created by extending these classes. To use them, follow the [tutorial in the Gem5 documentation](https://www.gem5.org/documentation/gem5-stdlib/develop-own-components-tutorial)
 
-**É importante lembrar de sempre recompilar o binário completo do Gem5 após adicionar um novo componenete a biblioteca existente.**
+**It's important to remember to always recompile the complete Gem5 binary after adding a new component to the existing library.**
 
-## Executando o Gem5
+## Running Gem5
 
-    1. É necessário compilar o binário do Gem5 usando o seguinte comando: 
+    1. It's necessary to compile the Gem5 binary using the following command:
         scons build/X86/gem5.opt -j <number of threads>
-    2. Da raiz do Gem5 deve-se executar:
+    2. From the Gem5 root directory, execute:
         ./build/X86/gem5.opt path/to/config/file.py
-    3. Conectar-se através de telnet ou ssh a simulação FS
-    4. Ao final, os resultados da simualação serão gerados no diretório gem5/m5out
+    3. Connect via telnet or ssh to the FS simulation.
+    4. In the end, simulation results will be generated in the gem5/m5out directory.
+
+
+
 

@@ -1,3 +1,24 @@
+"""
+    Architecture configuration:
+        - SimpleProcessor:
+            -> 2 cores
+            -> 3GHz
+            -> Using KVM
+            -> X86
+        - Cache Hierarchy:
+            -> MESI
+            -> Two Level
+        - Memory:
+            -> DDR3
+            -> 1600MHz
+            -> 3GB
+        - Kernel:
+            -> From Gem5 Resources
+            -> Version 4.4.186
+        - Workload:
+            - Parallel pi estimation using Monte Carlo
+"""
+
 from gem5.utils.requires import requires
 from gem5.components.boards.x86_board import X86Board
 from gem5.components.memory.single_channel import SingleChannelDDR3_1600
@@ -9,7 +30,6 @@ from gem5.isas import ISA
 from gem5.coherence_protocol import CoherenceProtocol
 from gem5.simulate.simulator import Simulator
 from gem5.simulate.exit_event import ExitEvent
-from gem5.resources.workload import Workload
 from gem5.resources.resource import DiskImageResource
 from gem5.resources.resource import Resource
 
@@ -36,9 +56,9 @@ cache_hierarchy = MESITwoLevelCacheHierarchy(
 memory = SingleChannelDDR3_1600(size="3GB")
 
 processor = SimpleProcessor(
-    cpu_type=CPUTypes.O3,
+    cpu_type=CPUTypes.KVM,
     isa=ISA.X86,
-    num_cores=4,
+    num_cores=2,
 )
 
 board = X86Board(
@@ -62,5 +82,7 @@ board.set_kernel_disk_workload(
     readfile_contents=command,
 )
 
-simulator = Simulator(board=board)
+simulator = Simulator(
+    board=board,
+)
 simulator.run()

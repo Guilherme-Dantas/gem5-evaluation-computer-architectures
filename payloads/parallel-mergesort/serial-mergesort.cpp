@@ -1,7 +1,10 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <chrono>
 
+
+using namespace std::chrono;
 using namespace std;
 
 void merge(int array[], int const left, int const mid,
@@ -89,6 +92,22 @@ int main()
         array[i] = std::rand() % arraySize; // Generating random integers between 0 and 99
     }
 
+    auto start = high_resolution_clock::now();
     mergeSort(array, 0, arraySize - 1);
+    auto stop = high_resolution_clock::now();
+
+    auto duration = duration_cast<milliseconds>(stop - start);
+    cout << duration.count() << endl;
+
+    cout << "Finished mergesort!" << endl;
+
+    for(int i = 0; i < arraySize - 1; i++){
+        if(array[i] > array[i + 1]){
+            cout << "Sort error!" <<  endl;
+            return 0;
+        }
+    }
+
+    cout << "Sort Success!" << endl;
     return 0;
 }

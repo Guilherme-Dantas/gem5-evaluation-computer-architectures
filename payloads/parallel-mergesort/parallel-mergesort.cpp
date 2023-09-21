@@ -2,7 +2,10 @@
 #include <cstdlib>
 #include <ctime>
 #include <omp.h>
+#include <chrono>
 
+
+using namespace std::chrono;
 using namespace std;
 
 void merge(int array[], int const left, int const mid,
@@ -70,11 +73,12 @@ void mergeSort(int array[], int const begin, int const end)
 
     int mid = begin + (end - begin) / 2;
     
-    #pragma omp task firstprivate(array, begin, mid)
+    #pragma task firstprivate(array, begin, mid)
     mergeSort(array, begin, mid);
 
-    #pragma omp taks firstprivate(array, mid. end)
+    #pragma task firstprivate(array, mid, end)
     mergeSort(array, mid + 1, end);
+
 
     #pragma omp taskwait
     merge(array, begin, mid, end);
@@ -84,6 +88,7 @@ int main()
 {
     int const arraySize = 15000000;
     auto array = new int[arraySize];
+    auto temp = new int[arraySize];
 
     // Seed the random number generator
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
@@ -94,6 +99,31 @@ int main()
         array[i] = std::rand() % arraySize; // Generating random integers between 0 and 99
     }
 
-    mergeSort(array, 0, arraySize - 1);
+    cout << omp_get_max_threads() << endl;
+
+    auto start = high_resolution_clock::now();
+    //omp_set_nested(1); // Enable nested parallelism, if available
+
+    omp_set_num_threads(8);
+    #pragma omp parallel
+    {
+        #pragma omp single
+        mergeSort(array, 0, arraySize - 1);
+    }
+    auto stop = high_resolution_clock::now();
+
+    auto duration = duration_cast<milliseconds>(stop - start);
+    cout << duration.count() << endl;
+
+    cout << "Finished mergesort!" << endl;
+
+    for(int i = 0; i < arraySize - 1; i++){
+        if(array[i] > array[i + 1]){
+            cout << "Sort error!" <<  endl;
+            return 0;
+        }
+    }
+
+    cout << "Sort Success!" << endl;
     return 0;
 }

@@ -1,13 +1,13 @@
 """
     Architecture configuration:
         - SimpleProcessor:
-            -> 2 cores
+            -> 8 cores
             -> 3GHz
             -> Using KVM
             -> X86
         - Cache Hierarchy:
-            -> MOESI
-            -> Two Level
+            -> MESI
+            -> Three Level
         - Memory:
             -> DDR3
             -> 1600MHz
@@ -18,7 +18,7 @@
         - Workload:
             - Parallel pi estimation using Monte Carlo
 """
-
+import os
 from gem5.utils.requires import requires
 from gem5.components.boards.x86_board import X86Board
 from gem5.components.memory.single_channel import SingleChannelDDR3_1600
@@ -33,24 +33,28 @@ from gem5.simulate.exit_event import ExitEvent
 from gem5.resources.resource import DiskImageResource
 from gem5.resources.resource import Resource
 
+DISK_PATH = "/home/dantas/Documentos/GitHub/evaluation-architecture-computers/disk-image/x86-ubuntu/x86-ubuntu-image/x86-ubuntu"
+
 requires(
     isa_required=ISA.X86,
     coherence_protocol_required=CoherenceProtocol.MESI_TWO_LEVEL,
     kvm_required=True,
 )
 
-from gem5.components.cachehierarchies.ruby.mesi_two_level_cache_hierarchy import (
-    MOESITwoLevelCacheHierarchy,
+from gem5.components.cachehierarchies.ruby.mesi_three_level_cache_hierarchy import (
+    MESIThreeLevelCacheHierarchy,
 )
 
-cache_hierarchy = MOESITwoLevelCacheHierarchy(
+cache_hierarchy = MESIThreeLevelCacheHierarchy(
     l1d_size="16kB",
     l1d_assoc=8,
     l1i_size="16kB",
     l1i_assoc=8,
     l2_size="256kB",
     l2_assoc=16,
-    num_l2_banks=1,
+    l3_size="512kB",
+    l3_assoc=16,
+    num_l3_banks=1,
 )
 
 memory = SingleChannelDDR3_1600(size="3GB")
@@ -58,7 +62,7 @@ memory = SingleChannelDDR3_1600(size="3GB")
 processor = SimpleProcessor(
     cpu_type=CPUTypes.KVM,
     isa=ISA.X86,
-    num_cores=2,
+    num_cores=8,
 )
 
 board = X86Board(
@@ -77,7 +81,7 @@ command = "echo 'Executing monte carlo parallel.';" \
 board.set_kernel_disk_workload(
     kernel=Resource("x86-linux-kernel-4.4.186"),
     disk_image=DiskImageResource(
-        local_path='/home/dantas/Documentos/GitHub/evaluation-architecture-computers/disk-image/x86-ubuntu/x86-ubuntu-image/x86-ubuntu',
+        local_path=DISK_PATH,
         root_partition="1"),
     readfile_contents=command,
 )

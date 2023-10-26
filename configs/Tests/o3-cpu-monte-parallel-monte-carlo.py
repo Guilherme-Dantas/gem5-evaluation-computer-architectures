@@ -57,7 +57,7 @@ command = "echo 'Executing monte carlo parallel.';" \
 board.set_kernel_disk_workload(
     kernel=Resource("x86-linux-kernel-4.4.186"),
     disk_image=DiskImageResource(
-        local_path='/home/dantas/Documentos/GitHub/evaluation-architecture-computers/disk-image/x86-ubuntu/x86-ubuntu-image/x86-ubuntu',
+        local_path=DISK_PATH,
         root_partition="1"),
     readfile_contents=command,
 )

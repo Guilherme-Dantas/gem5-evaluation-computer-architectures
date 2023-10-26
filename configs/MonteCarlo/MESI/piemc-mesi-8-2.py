@@ -1,7 +1,7 @@
 """
     Architecture configuration:
         - SimpleProcessor:
-            -> 1 cores
+            -> 8 cores
             -> 3GHz
             -> Using KVM
             -> X86
@@ -18,7 +18,7 @@
         - Workload:
             - Parallel pi estimation using Monte Carlo
 """
-
+import os
 from gem5.utils.requires import requires
 from gem5.components.boards.x86_board import X86Board
 from gem5.components.memory.single_channel import SingleChannelDDR3_1600
@@ -32,6 +32,8 @@ from gem5.simulate.simulator import Simulator
 from gem5.simulate.exit_event import ExitEvent
 from gem5.resources.resource import DiskImageResource
 from gem5.resources.resource import Resource
+
+DISK_PATH = "/home/dantas/Documentos/GitHub/evaluation-architecture-computers/disk-image/x86-ubuntu/x86-ubuntu-image/x86-ubuntu"
 
 requires(
     isa_required=ISA.X86,
@@ -58,7 +60,7 @@ memory = SingleChannelDDR3_1600(size="3GB")
 processor = SimpleProcessor(
     cpu_type=CPUTypes.KVM,
     isa=ISA.X86,
-    num_cores=1,
+    num_cores=8,
 )
 
 board = X86Board(
@@ -77,7 +79,7 @@ command = "echo 'Executing monte carlo parallel.';" \
 board.set_kernel_disk_workload(
     kernel=Resource("x86-linux-kernel-4.4.186"),
     disk_image=DiskImageResource(
-        local_path='/home/dantas/Documentos/GitHub/evaluation-architecture-computers/disk-image/x86-ubuntu/x86-ubuntu-image/x86-ubuntu',
+        local_path=DISK_PATH,
         root_partition="1"),
     readfile_contents=command,
 )

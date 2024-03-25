@@ -33,12 +33,12 @@ from gem5.simulate.exit_event import ExitEvent
 from gem5.resources.resource import DiskImageResource
 from gem5.resources.resource import Resource
 
-DISK_PATH = "/home/dantas/Documentos/GitHub/evaluation-architecture-computers/disk-image/x86-ubuntu/x86-ubuntu-image/x86-ubuntu"
+DISK_PATH = "/home/guilherme.dantas/disk-images/x86-ubuntu";
 
 requires(
     isa_required=ISA.X86,
-    coherence_protocol_required=CoherenceProtocol.MESI_TWO_LEVEL,
-    kvm_required=True,
+    coherence_protocol_required=CoherenceProtocol.MESI_THREE_LEVEL,
+    kvm_required=False,
 )
 
 from gem5.components.cachehierarchies.ruby.mesi_three_level_cache_hierarchy import (
@@ -60,7 +60,7 @@ cache_hierarchy = MESIThreeLevelCacheHierarchy(
 memory = SingleChannelDDR3_1600(size="3GB")
 
 processor = SimpleProcessor(
-    cpu_type=CPUTypes.KVM,
+    cpu_type=CPUTypes.O3,
     isa=ISA.X86,
     num_cores=8,
 )
@@ -76,6 +76,7 @@ command = "echo 'Executing monte carlo parallel.';" \
         + "cd ../home/gem5/;" \
         + "g++ -fopenmp monte-carlo-parallel.cpp -o monte-carlo-parallel;" \
         + "./monte-carlo-parallel;" \
+        + "sleep 10;" \
         + "m5 exit;"
 
 board.set_kernel_disk_workload(

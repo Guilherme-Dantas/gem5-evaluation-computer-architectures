@@ -1,6 +1,6 @@
 """
     Architecture configuration:
-        - SimpleProcessor:
+        - O3:
             -> 4 cores
             -> 3GHz
             -> Using KVM
@@ -29,7 +29,6 @@ from gem5.components.processors.cpu_types import CPUTypes
 from gem5.isas import ISA
 from gem5.coherence_protocol import CoherenceProtocol
 from gem5.simulate.simulator import Simulator
-from gem5.simulate.exit_event import ExitEvent
 from gem5.resources.resource import DiskImageResource
 from gem5.resources.resource import Resource
 
@@ -58,7 +57,7 @@ cache_hierarchy = MESITwoLevelCacheHierarchy(
 
 memory = SingleChannelDDR3_1600(size="3GB")
 
-processor = SimpleProcessor(
+processor = X86Board(
     cpu_type=CPUTypes.O3,
     isa=ISA.X86,
     num_cores=4,

@@ -1,13 +1,13 @@
 """
     Architecture configuration:
-        - SimpleProcessor:
-            -> 4 core
+        - O3:
+            -> 4 cores
             -> 3GHz
             -> Using KVM
             -> X86
         - Cache Hierarchy:
-            -> MESI
-            -> Three Levels
+            -> MOESI
+            -> Two Level
         - Memory:
             -> DDR3
             -> 1600MHz
@@ -34,31 +34,30 @@ from gem5.resources.resource import DiskImageResource
 from gem5.resources.resource import Resource
 
 DISK_PATH = "/home/guilherme.dantas/disk-images/x86-ubuntu"
+
 requires(
     isa_required=ISA.X86,
-    coherence_protocol_required=CoherenceProtocol.MESI_THREE_LEVEL,
+    coherence_protocol_required=CoherenceProtocol.MOESI_TWO_LEVEL,
     kvm_required=True,
 )
 
-from gem5.components.cachehierarchies.ruby.mesi_three_level_cache_hierarchy import (
-    MESIThreeLevelCacheHierarchy,
+from gem5.components.cachehierarchies.ruby.moesi_two_level_cache_hierarchy import (
+    MOESITwoLevelCacheHierarchy,
 )
 
-cache_hierarchy = MESIThreeLevelCacheHierarchy(
+cache_hierarchy = MOESITwoLevelCacheHierarchy(
     l1d_size="16kB",
     l1d_assoc=8,
     l1i_size="16kB",
     l1i_assoc=8,
     l2_size="256kB",
     l2_assoc=16,
-    l3_size="512kB",
-    l3_assoc=16,
-    num_l3_banks=1,
+    num_l2_banks=1,
 )
 
 memory = SingleChannelDDR3_1600(size="3GB")
 
-processor = SimpleProcessor(
+processor = X86Board(
     cpu_type=CPUTypes.O3,
     isa=ISA.X86,
     num_cores=4,

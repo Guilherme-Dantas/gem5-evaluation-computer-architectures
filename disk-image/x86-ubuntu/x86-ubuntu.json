@@ -63,7 +63,7 @@
         },
         {
             "type": "file",
-            "source": "/home/dantas/Documentos/gem5/util/m5/build/x86/out/m5",
+            "source": "../../gem5/util/m5/build/x86/out/m5",
             "destination": "/home/gem5/"
         },
         {

@@ -66,4 +66,7 @@
 # Packer
 packer
 
+# gem5
+gem5/
+
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,c++,executable

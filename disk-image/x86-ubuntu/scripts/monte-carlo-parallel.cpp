@@ -12,7 +12,7 @@ using std::chrono::milliseconds;
 
 int main()
 {
-    long long int dots_quantity = 100;
+    long long int dots_quantity = 2000;
 
     random_device rd;
     mt19937 gen(rd());

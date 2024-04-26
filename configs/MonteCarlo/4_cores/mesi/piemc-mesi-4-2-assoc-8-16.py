@@ -72,7 +72,7 @@ board = X86Board(
 
 command = "echo 'Executing monte carlo parallel.';" \
         + "cd ../home/gem5/;" \
-        + "g++ -fopenmp monte-carlo-parallel.cpp -o monte-carlo-parallel;" \
+        + "g++ -fopenmp payloads/monte-carlo-parallel-100.cpp -o monte-carlo-parallel;" \
         + "./monte-carlo-parallel;" \
         + "sleep 10;" \
         + "m5 exit;"

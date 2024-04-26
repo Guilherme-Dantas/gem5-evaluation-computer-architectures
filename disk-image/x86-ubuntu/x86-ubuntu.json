@@ -78,7 +78,7 @@
         },
         {
             "type": "file",
-            "source": "x86-ubuntu/scripts/monte-carlo-parallel.cpp",
+            "source": "../payloads/",
             "destination": "/home/gem5/"
         },
         {

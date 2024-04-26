@@ -69,4 +69,7 @@ packer
 # gem5
 gem5/
 
+#images
+x86-ubuntu-image/
+
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,c++,executable

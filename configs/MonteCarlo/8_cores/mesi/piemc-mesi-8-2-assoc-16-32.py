@@ -57,7 +57,7 @@ cache_hierarchy = MESITwoLevelCacheHierarchy(
 
 memory = SingleChannelDDR3_1600(size="3GB")
 
-processor = X86Board(
+processor = SimpleProcessor(
     cpu_type=CPUTypes.O3,
     isa=ISA.X86,
     num_cores=8,
@@ -71,8 +71,8 @@ board = X86Board(
 )
 
 command = "echo 'Executing monte carlo parallel.';" \
-        + "cd ../home/gem5/;" \
-        + "g++ -fopenmp monte-carlo-parallel.cpp -o monte-carlo-parallel;" \
+        + "cd ../home/gem5/pi-estimation;" \
+        + "g++ -fopenmp monte-carlo-parallel-2000.cpp -o monte-carlo-parallel;" \
         + "./monte-carlo-parallel;" \
         + "sleep 10;" \
         + "m5 exit;"

@@ -1,7 +1,7 @@
 """
     Architecture configuration:
         - O3:
-            -> 4 cores
+            -> 8 cores
             -> 3GHz
             -> Using KVM
             -> X86
@@ -46,12 +46,12 @@ from gem5.components.cachehierarchies.ruby.mesi_two_level_cache_hierarchy import
 )
 
 cache_hierarchy = MESITwoLevelCacheHierarchy(
-    l1d_size="64kB",
-    l1d_assoc=16,
-    l1i_size="64kB",
-    l1i_assoc=16,
-    l2_size="512kB",
-    l2_assoc=32,
+    l1d_size="128kB",
+    l1d_assoc=8,
+    l1i_size="128kB",
+    l1i_assoc=8,
+    l2_size="1024kB",
+    l2_assoc=16,
     num_l2_banks=1,
 )
 
@@ -60,7 +60,7 @@ memory = SingleChannelDDR3_1600(size="3GB")
 processor = SimpleProcessor(
     cpu_type=CPUTypes.O3,
     isa=ISA.X86,
-    num_cores=4,
+    num_cores=8,
 )
 
 board = X86Board(

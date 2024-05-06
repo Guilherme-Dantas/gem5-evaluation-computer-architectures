@@ -1,7 +1,7 @@
 """
     Architecture configuration:
         - O3:
-            -> 8 cores
+            -> 4 cores
             -> 3GHz
             -> Using KVM
             -> X86
@@ -37,7 +37,7 @@ DISK_PATH = "/home/guilherme.dantas/disk-images/x86-ubuntu"
 
 requires(
     isa_required=ISA.X86,
-    coherence_protocol_required=CoherenceProtocol.MOESI_TWO_LEVEL,
+    coherence_protocol_required=CoherenceProtocol.MOESI_CMP_DIRECTORY,
     kvm_required=True,
 )
 
@@ -47,20 +47,20 @@ from gem5.components.cachehierarchies.ruby.moesi_two_level_cache_hierarchy impor
 
 cache_hierarchy = MOESITwoLevelCacheHierarchy(
     l1d_size="64kB",
-    l1d_assoc=16,
+    l1d_assoc=8,
     l1i_size="64kB",
-    l1i_assoc=16,
+    l1i_assoc=8,
     l2_size="512kB",
-    l2_assoc=32,
+    l2_assoc=16,
     num_l2_banks=1,
 )
 
 memory = SingleChannelDDR3_1600(size="3GB")
 
-processor = X86Board(
+processor = SimpleProcessor(
     cpu_type=CPUTypes.O3,
     isa=ISA.X86,
-    num_cores=8,
+    num_cores=4,
 )
 
 board = X86Board(
@@ -71,8 +71,8 @@ board = X86Board(
 )
 
 command = "echo 'Executing monte carlo parallel.';" \
-        + "cd ../home/gem5/;" \
-        + "g++ -fopenmp monte-carlo-parallel.cpp -o monte-carlo-parallel;" \
+        + "cd ../home/gem5/pi-estimation;" \
+        + "g++ -fopenmp monte-carlo-parallel-2000.cpp -o monte-carlo-parallel;" \
         + "./monte-carlo-parallel;" \
         + "sleep 10;" \
         + "m5 exit;"

@@ -1,12 +1,12 @@
 """
     Architecture configuration:
         - O3:
-            -> 8 cores
+            -> 4 cores
             -> 3GHz
             -> Using KVM
             -> X86
         - Cache Hierarchy:
-            -> MESI
+            -> MOESI
             -> Two Level
         - Memory:
             -> DDR3
@@ -29,29 +29,29 @@ from gem5.components.processors.cpu_types import CPUTypes
 from gem5.isas import ISA
 from gem5.coherence_protocol import CoherenceProtocol
 from gem5.simulate.simulator import Simulator
+from gem5.simulate.exit_event import ExitEvent
 from gem5.resources.resource import DiskImageResource
 from gem5.resources.resource import Resource
 
 DISK_PATH = "/home/guilherme.dantas/disk-images/x86-ubuntu"
 
-
 requires(
     isa_required=ISA.X86,
-    coherence_protocol_required=CoherenceProtocol.MESI_TWO_LEVEL,
+    coherence_protocol_required=CoherenceProtocol.MOESI_CMP_DIRECTORY,
     kvm_required=True,
 )
 
-from gem5.components.cachehierarchies.ruby.mesi_two_level_cache_hierarchy import (
-    MESITwoLevelCacheHierarchy,
+from gem5.components.cachehierarchies.ruby.moesi_two_level_cache_hierarchy import (
+    MOESITwoLevelCacheHierarchy,
 )
 
-cache_hierarchy = MESITwoLevelCacheHierarchy(
-    l1d_size="64kB",
-    l1d_assoc=16,
-    l1i_size="64kB",
-    l1i_assoc=16,
-    l2_size="512kB",
-    l2_assoc=32,
+cache_hierarchy = MOESITwoLevelCacheHierarchy(
+    l1d_size="128kB",
+    l1d_assoc=8,
+    l1i_size="128kB",
+    l1i_assoc=8,
+    l2_size="1024kB",
+    l2_assoc=16,
     num_l2_banks=1,
 )
 
@@ -60,7 +60,7 @@ memory = SingleChannelDDR3_1600(size="3GB")
 processor = SimpleProcessor(
     cpu_type=CPUTypes.O3,
     isa=ISA.X86,
-    num_cores=8,
+    num_cores=4,
 )
 
 board = X86Board(

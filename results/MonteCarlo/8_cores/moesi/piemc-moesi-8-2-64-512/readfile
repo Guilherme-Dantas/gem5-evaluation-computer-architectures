@@ -1,0 +1,1 @@
+echo 'Executing monte carlo parallel.';cd ../home/gem5/pi-estimation;g++ -fopenmp monte-carlo-parallel-2000.cpp -o monte-carlo-parallel;./monte-carlo-parallel;sleep 10;m5 exit;
